@@ -5,9 +5,12 @@
   +---------------------+
 */
 
-#include	<stdlib.h>
-
 #include	"tlist.h"
+
+struct s_list*	CreateList()
+{
+  return (0x0);
+}
 
 struct s_list*	CreateNode(void* data)
 {
@@ -16,9 +19,10 @@ struct s_list*	CreateNode(void* data)
   n = malloc(sizeof(t_list));
   if (n == 0) { return (0); }
 
+  memset(n, 0x0, sizeof(t_list));
   n->data = data;
   n->prev = 0x0;
-  n->next = 0x0;
+  n->next = 0;
   return (n);
 }
 
@@ -124,6 +128,13 @@ void*		GetIdx(struct s_list* list, unsigned int idx)
   if (list != 0x0)
     return (list->data);
   return (0x0);
+}
+
+void*		GetCurrent(struct s_list* list)
+{
+  if (list == 0x0) { return (0x0); }
+
+  return (list->data);
 }
 
 unsigned int	GetCount(struct s_list* list)
@@ -270,3 +281,26 @@ void		FreeListData(struct s_list* list)
       list = list->next;
     }
 }
+
+L_ITERATOR	InitIterator(struct s_list* list)
+{
+  t_list*	tmp;
+
+  tmp = list;
+  while (tmp->prev != 0x0)
+    tmp = tmp->prev;
+  return (tmp);
+}
+
+L_ITERATOR	NextIterator(L_ITERATOR i)
+{
+  i = i->next;
+  return (i);
+}
+
+L_ITERATOR	PrevIterator(L_ITERATOR i)
+{
+  i = i->prev;
+  return (i);
+}
+
